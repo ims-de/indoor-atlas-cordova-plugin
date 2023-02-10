@@ -738,7 +738,7 @@ function IndoorAtlas() {
   this.getTraceId = function(onTraceId) {
     callbacks.onTraceId = onTraceId;
     if (statusHasBeenAvailable) {
-        native('getTraceId', [], function (traceId) {
+      native('getTraceId', [], function (traceId) {
         // this might lose some trace IDs if this is called rapidly
         if (callbacks.onTraceId) {
           callbacks.onTraceId(traceId.traceId);
@@ -750,21 +750,34 @@ function IndoorAtlas() {
   };
 
   this.addArPlane = function (centerX, centerY, centerZ, extentX, extentZ) {
-    native('addArPlane', [centerX, centerY, centerZ, extentX, extentZ]);
+    if (initialized) {
+      native('addArPlane', [centerX, centerY, centerZ, extentX, extentZ]);
+    }
   };
 
   this.getARConverged = function (cb) {
-    native('getARConverged', [], function(response) {
-      cb(response.converged);
-    });
+    callbacks.onARConverged = cb;
+
+    if (initialized) {
+      native('getARConverged', [], function (response) {
+        if (callbacks.onARConverged) {
+          callbacks.onARConverged(response);
+          delete callbacks.onARConverged;
+        }
+      });
+    }
   };
 
   this.setARCameraToWorldMatrix = function (values) {
-    native('setARCameraToWorldMatrix', [values]);
+    if (initialized) {
+      native('setARCameraToWorldMatrix', [values]);
+    }
   };
 
   this.setARPoseMatrix = function (values) {
-    native('setARPoseMatrix', [values]);
+    if (initialized) {
+      native('setARPoseMatrix', [values]);
+    }
   };
 }
 
