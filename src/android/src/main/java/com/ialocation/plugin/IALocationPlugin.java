@@ -253,7 +253,7 @@ public class IALocationPlugin extends CordovaPlugin {
               boolean locked = args.getBoolean(0);
               lockIndoors(locked);
             } else if ("addARPlane".equals(action)) {
-                addArPlain(
+                executeAddArPlain(
                         (float) args.getDouble(0),
                         (float) args.getDouble(1),
                         (float) args.getDouble(2),
@@ -261,11 +261,11 @@ public class IALocationPlugin extends CordovaPlugin {
                         (float) args.getDouble(4)
                 );
             } else if ("getARConverged".equals(action)) {
-                getARConverged(callbackContext);
+                executeGetARConverged(callbackContext);
             } else if ("setARCameraToWorldMatrix".equals(action)) {
-                setARCameraToWorldMatrix(args.getJSONArray(0), callbackContext);
+                executeSetARCameraToWorldMatrix(args.getJSONArray(0), callbackContext);
             } else if ("setARPoseMatrix".equals(action)) {
-                setARPoseMatrix(args.getJSONArray(0), callbackContext);
+                executeSetARPoseMatrix(args.getJSONArray(0), callbackContext);
             }
         }
         catch(Exception ex) {
@@ -972,7 +972,13 @@ public class IALocationPlugin extends CordovaPlugin {
         return mArSession;
     }
 
-    private void addArPlain(float centerX, float centerY, float centerZ, float extentX, float extentZ)
+    @ReactMethod
+    public void addArPlane(ReadableArray args, Callback success, Callback error)
+    {
+        executeReactMethod("addArPlane", args, success, error);
+    }
+
+    private void executeAddArPlain(float centerX, float centerY, float centerZ, float extentX, float extentZ)
     {
         requestARUpdates().addArPlane(
             new float[]{centerX, centerY, centerZ},
@@ -981,7 +987,13 @@ public class IALocationPlugin extends CordovaPlugin {
         );
     }
 
-    private void getARConverged(CallbackContext callbackContext) throws JSONException
+    @ReactMethod
+    public void getARConverged(ReadableArray args, Callback success, Callback error)
+    {
+        executeReactMethod("getARConverged", args, success, error);
+    }
+
+    private void executeGetARConverged(CallbackContext callbackContext) throws JSONException
     {
         boolean converged = requestARUpdates().converged();
 
@@ -1006,12 +1018,24 @@ public class IALocationPlugin extends CordovaPlugin {
         return values;
     }
 
-    private void setARCameraToWorldMatrix(JSONArray floats, CallbackContext callbackContext) throws JSONException
+    @ReactMethod
+    public void getARCameraToWorldMatrix(ReadableArray args, Callback success, Callback error)
+    {
+        executeReactMethod("getARCameraToWorldMatrix", args, success, error);
+    }
+
+    private void executeSetARCameraToWorldMatrix(JSONArray floats, CallbackContext callbackContext) throws JSONException
     {
         requestARUpdates().setCameraToWorldMatrix(getFloatValues(floats, callbackContext));
     }
 
-    private void setARPoseMatrix(JSONArray floats, CallbackContext callbackContext) throws JSONException
+    @ReactMethod
+    public void setARPoseMatrix(ReadableArray args, Callback success, Callback error)
+    {
+        executeReactMethod("setARPoseMatrix", args, success, error);
+    }
+
+    private void executeSetARPoseMatrix(JSONArray floats, CallbackContext callbackContext) throws JSONException
     {
         requestARUpdates().setPoseMatrix(getFloatValues(floats, callbackContext));
     }
