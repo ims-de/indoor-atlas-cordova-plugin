@@ -7,57 +7,19 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONArray;
 
-import com.facebook.react.bridge.Arguments;
-import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableMapKeySetIterator;
 import com.facebook.react.bridge.ReadableType;
+import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.Callback;
 
 import android.util.Log;
 
 class Utils
 {
-    public static JSONObject reactToJSON(ReadableMap readableMap) throws JSONException
-    {
-        JSONObject jsonObject = new JSONObject();
-        ReadableMapKeySetIterator iterator = readableMap.keySetIterator();
-
-        while (iterator.hasNextKey()){
-            String key = iterator.nextKey();
-            ReadableType valueType = readableMap.getType(key);
-
-            switch (valueType){
-                case Null:
-                    jsonObject.put(key,JSONObject.NULL);
-                    break;
-
-                case Boolean:
-                    jsonObject.put(key, readableMap.getBoolean(key));
-                    break;
-
-                case Number:
-                    jsonObject.put(key, readableMap.getDouble(key));
-                    break;
-
-                case String:
-                    jsonObject.put(key, readableMap.getString(key));
-                    break;
-
-                case Map:
-                    jsonObject.put(key, reactToJSON(readableMap.getMap(key)));
-                    break;
-
-                case Array:
-                    jsonObject.put(key, reactToJSON(readableMap.getArray(key)));
-                    break;
-            }
-        }
-
-        return jsonObject;
-    }
-
     public static JSONArray reactToJSON(ReadableArray readableArray) throws JSONException
     {
         JSONArray jsonArray = new JSONArray();
@@ -95,6 +57,37 @@ class Utils
         return jsonArray;
     }
 
+    public static JSONObject reactToJSON(ReadableMap readableMap) throws JSONException {
+        JSONObject jsonObject = new JSONObject();
+        ReadableMapKeySetIterator iterator = readableMap.keySetIterator();
+        while(iterator.hasNextKey()){
+            String key = iterator.nextKey();
+            ReadableType valueType = readableMap.getType(key);
+            switch (valueType){
+                case Null:
+                    jsonObject.put(key,JSONObject.NULL);
+                    break;
+                case Boolean:
+                    jsonObject.put(key, readableMap.getBoolean(key));
+                    break;
+                case Number:
+                    jsonObject.put(key, readableMap.getDouble(key));
+                    break;
+                case String:
+                    jsonObject.put(key, readableMap.getString(key));
+                    break;
+                case Map:
+                    jsonObject.put(key, reactToJSON(readableMap.getMap(key)));
+                    break;
+                case Array:
+                    jsonObject.put(key, reactToJSON(readableMap.getArray(key)));
+                    break;
+            }
+        }
+
+        return jsonObject;
+    }
+
     public static WritableMap jsonToReact(JSONObject jsonObject) throws JSONException
     {
         WritableMap writableMap = Arguments.createMap();
@@ -120,6 +113,27 @@ class Utils
         }
 
         return writableMap;
+    }
+
+    public static WritableArray jsonToReact(JSONArray jsonArray) throws JSONException {
+        WritableArray writableArray = Arguments.createArray();
+        for(int i=0; i < jsonArray.length(); i++) {
+            Object value = jsonArray.get(i);
+            if (value instanceof Float || value instanceof Double) {
+                writableArray.pushDouble(jsonArray.getDouble(i));
+            } else if (value instanceof Number) {
+                writableArray.pushInt(jsonArray.getInt(i));
+            } else if (value instanceof String) {
+                writableArray.pushString(jsonArray.getString(i));
+            } else if (value instanceof JSONObject) {
+                writableArray.pushMap(jsonToReact(jsonArray.getJSONObject(i)));
+            } else if (value instanceof JSONArray){
+                writableArray.pushArray(jsonToReact(jsonArray.getJSONArray(i)));
+            } else if (value == JSONObject.NULL){
+                writableArray.pushNull();
+            }
+        }
+        return writableArray;
     }
 
     public static float[] getFloatValues(JSONArray floats, CallbackContext callbackContext) throws JSONException
