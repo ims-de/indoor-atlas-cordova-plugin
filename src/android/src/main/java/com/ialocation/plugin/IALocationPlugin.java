@@ -34,6 +34,7 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.bridge.Arguments;
 import com.remobile.cordova.CordovaPlugin;
 import com.remobile.cordova.PluginResult;
 import org.json.JSONArray;
@@ -993,7 +994,7 @@ public class IALocationPlugin extends CordovaPlugin {
     {
         boolean converged = requestARUpdates().converged();
 
-        WritableMap response = new WritableMap();
+        WritableMap response = Arguments.createMap();
         response.putBoolean("converged", converged);
 
         success.invoke(response);
@@ -1048,7 +1049,7 @@ public class IALocationPlugin extends CordovaPlugin {
     @ReactMethod
     public void setARCameraToWorldMatrix(ReadableArray args, Callback success, Callback error)
     {
-        Log.d("IndoorAtlas", "setARCameraToWorldMatrix: " + floats);
+        Log.d("IndoorAtlas", "setARCameraToWorldMatrix: " + args);
         requestARUpdates().setCameraToWorldMatrix(getFloatValues(args.getArray(0), callbackContext));
     }
 
@@ -1061,7 +1062,7 @@ public class IALocationPlugin extends CordovaPlugin {
     @ReactMethod
     public void setARPoseMatrix(ReadableArray args, Callback success, Callback error)
     {
-        Log.d("IndoorAtlas", "setARPoseMatrix: " + floats);
+        Log.d("IndoorAtlas", "setARPoseMatrix: " + args);
         requestARUpdates().setARPoseMatrix(getFloatValues(args.getArray(0), error));
     }
 
