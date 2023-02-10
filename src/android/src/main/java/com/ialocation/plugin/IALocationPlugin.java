@@ -1019,9 +1019,9 @@ public class IALocationPlugin extends CordovaPlugin {
     }
 
     @ReactMethod
-    public void getARCameraToWorldMatrix(ReadableArray args, Callback success, Callback error)
+    public void setARCameraToWorldMatrix(ReadableArray args, Callback success, Callback error)
     {
-        executeReactMethod("getARCameraToWorldMatrix", args, success, error);
+        executeReactMethod("setARCameraToWorldMatrix", args, success, error);
     }
 
     private void executeSetARCameraToWorldMatrix(JSONArray floats, CallbackContext callbackContext) throws JSONException
