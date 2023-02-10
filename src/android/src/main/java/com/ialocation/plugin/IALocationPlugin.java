@@ -33,6 +33,7 @@ import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableArray;
+import com.facebook.react.bridge.WritableMap;
 import com.remobile.cordova.CordovaPlugin;
 import com.remobile.cordova.PluginResult;
 import org.json.JSONArray;
@@ -261,11 +262,11 @@ public class IALocationPlugin extends CordovaPlugin {
                     (float) args.getDouble(4)
                 );
             } else if ("getARConverged".equals(action)) {
-                executeGetARConverged(callbackContext);
+                getARConverged(callbackContext);
             } else if ("setARCameraToWorldMatrix".equals(action)) {
-                executeSetARCameraToWorldMatrix(args.getJSONArray(0), callbackContext);
+                setCameraToWorldMatrix(args.getJSONArray(0), callbackContext);
             } else if ("setARPoseMatrix".equals(action)) {
-                executeSetARPoseMatrix(args.getJSONArray(0), callbackContext);
+                setARPoseMatrix(args.getJSONArray(0), callbackContext);
             }
         }
         catch(Exception ex) {
@@ -990,10 +991,15 @@ public class IALocationPlugin extends CordovaPlugin {
     @ReactMethod
     public void getARConverged(ReadableArray args, Callback success, Callback error)
     {
-        executeReactMethod("getARConverged", args, success, error);
+        boolean converged = requestARUpdates().converged();
+
+        WritableMap response = new WritableMap();
+        response.putBoolean("converged", converged);
+
+        success.invoke(response);
     }
 
-    private void executeGetARConverged(CallbackContext callbackContext) throws JSONException
+    private void getARConverged(CallbackContext callbackContext) throws JSONException
     {
         boolean converged = requestARUpdates().converged();
 
@@ -1015,28 +1021,53 @@ public class IALocationPlugin extends CordovaPlugin {
             values[i] = (float) floats.getDouble(i);
         }
 
+        Log.d("IndoorAtlas", "Input: " + floats);
+        Log.d("IndoorAtlas", "Output: " + values);
+
+        return values;
+    }
+
+    private float[] getFloatValues(ReadableArray floats, Callback error)
+    {
+        if (floats.size() != 16) {
+            error.invoke("Argument must be an array with exactly 16 floats");
+        }
+
+        float[] values = new float[16];
+
+        for (int i = 0; i<16; i++) {
+            values[i] = (float) floats.getDouble(i);
+        }
+
+        Log.d("IndoorAtlas", "Input: " + floats);
+        Log.d("IndoorAtlas", "Output: " + values);
+
         return values;
     }
 
     @ReactMethod
     public void setARCameraToWorldMatrix(ReadableArray args, Callback success, Callback error)
     {
-        executeReactMethod("setARCameraToWorldMatrix", args, success, error);
+        Log.d("IndoorAtlas", "setARCameraToWorldMatrix: " + floats);
+        requestARUpdates().setCameraToWorldMatrix(getFloatValues(args.getArray(0), callbackContext));
     }
 
-    private void executeSetARCameraToWorldMatrix(JSONArray floats, CallbackContext callbackContext) throws JSONException
+    private void setCameraToWorldMatrix(JSONArray floats, CallbackContext callbackContext) throws JSONException
     {
+        Log.d("IndoorAtlas", "setARCameraToWorldMatrix: " + floats);
         requestARUpdates().setCameraToWorldMatrix(getFloatValues(floats, callbackContext));
     }
 
     @ReactMethod
     public void setARPoseMatrix(ReadableArray args, Callback success, Callback error)
     {
-        executeReactMethod("setARPoseMatrix", args, success, error);
+        Log.d("IndoorAtlas", "setARPoseMatrix: " + floats);
+        requestARUpdates().setARPoseMatrix(getFloatValues(args.getArray(0), error));
     }
 
-    private void executeSetARPoseMatrix(JSONArray floats, CallbackContext callbackContext) throws JSONException
+    private void setARPoseMatrix(JSONArray floats, CallbackContext callbackContext) throws JSONException
     {
+        Log.d("IndoorAtlas", "setARPoseMatrix: " + floats);
         requestARUpdates().setPoseMatrix(getFloatValues(floats, callbackContext));
     }
 }
