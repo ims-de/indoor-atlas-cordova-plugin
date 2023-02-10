@@ -1,6 +1,7 @@
 package com.ialocation.plugin;
 
 import java.util.Arrays;
+import java.util.Iterator;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -20,7 +21,7 @@ class Utils
     {
         JSONArray jsonArray = new JSONArray();
 
-        for (int i=0, l=args.size(); i<l; i++) {
+        for (int i=0, l=readableArray.size(); i<l; i++) {
             ReadableType valueType = readableArray.getType(i);
 
             switch (valueType){
@@ -29,7 +30,7 @@ class Utils
                     break;
 
                 case Boolean:
-                    jsonArray.put(args.getBoolean(i));
+                    jsonArray.put(readableArray.getBoolean(i));
                     break;
 
                 case Number:
