@@ -254,11 +254,11 @@ public class IALocationPlugin extends CordovaPlugin {
               lockIndoors(locked);
             } else if ("addARPlane".equals(action)) {
                 executeAddArPlain(
-                        (float) args.getDouble(0),
-                        (float) args.getDouble(1),
-                        (float) args.getDouble(2),
-                        (float) args.getDouble(3),
-                        (float) args.getDouble(4)
+                    (float) args.getDouble(0),
+                    (float) args.getDouble(1),
+                    (float) args.getDouble(2),
+                    (float) args.getDouble(3),
+                    (float) args.getDouble(4)
                 );
             } else if ("getARConverged".equals(action)) {
                 executeGetARConverged(callbackContext);
@@ -998,7 +998,7 @@ public class IALocationPlugin extends CordovaPlugin {
         boolean converged = requestARUpdates().converged();
 
         JSONObject response = new JSONObject();
-        response.put("converged", converged);
+        response.put("converged", converged ? 1 : 0);
 
         callbackContext.success(response);
     }
