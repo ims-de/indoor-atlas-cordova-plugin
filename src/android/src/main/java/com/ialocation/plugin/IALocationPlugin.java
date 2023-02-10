@@ -974,44 +974,6 @@ public class IALocationPlugin extends CordovaPlugin {
         return mArSession;
     }
 
-
-
-    private float[] getFloatValues(JSONArray floats, CallbackContext callbackContext) throws JSONException
-    {
-        if (floats.length() != 16) {
-            callbackContext.error("Argument must be an array with exactly 16 floats");
-        }
-
-        float[] values = new float[16];
-
-        for (int i = 0; i<16; i++) {
-            values[i] = (float) floats.getDouble(i);
-        }
-
-        Log.d("IndoorAtlas", "Input: " + floats);
-        Log.d("IndoorAtlas", "Output: " + values);
-
-        return values;
-    }
-
-    private float[] getFloatValues(ReadableArray floats, Callback error)
-    {
-        if (floats.size() != 16) {
-            error.invoke("Argument must be an array with exactly 16 floats");
-        }
-
-        float[] values = new float[16];
-
-        for (int i = 0; i<16; i++) {
-            values[i] = (float) floats.getDouble(i);
-        }
-
-        Log.d("IndoorAtlas", "Input: " + floats);
-        Log.d("IndoorAtlas", "Output: " + values);
-
-        return values;
-    }
-
     @ReactMethod
     public void addArPlane(ReadableArray args, Callback success, Callback error)
     {
@@ -1060,25 +1022,34 @@ public class IALocationPlugin extends CordovaPlugin {
     public void setARCameraToWorldMatrix(ReadableArray args, Callback success, Callback error)
     {
         Log.d("IndoorAtlas", "setARCameraToWorldMatrix: " + args);
-        requestARUpdates().setCameraToWorldMatrix(getFloatValues(args.getArray(0), error));
+        requestARUpdates().setCameraToWorldMatrix(Utils.getFloatValues(args.getArray(0), error));
     }
 
     private void setARCameraToWorldMatrix(JSONArray floats, CallbackContext callbackContext) throws JSONException
     {
         Log.d("IndoorAtlas", "setARCameraToWorldMatrix: " + floats);
-        requestARUpdates().setCameraToWorldMatrix(getFloatValues(floats, callbackContext));
+        requestARUpdates().setCameraToWorldMatrix(Utils.getFloatValues(floats, callbackContext));
     }
 
     @ReactMethod
     public void setARPoseMatrix(ReadableArray args, Callback success, Callback error)
     {
         Log.d("IndoorAtlas", "setARPoseMatrix: " + args);
-        requestARUpdates().setPoseMatrix(getFloatValues(args.getArray(0), error));
+        requestARUpdates().setPoseMatrix(Utils.getFloatValues(args.getArray(0), error));
     }
 
     private void setARPoseMatrix(JSONArray floats, CallbackContext callbackContext) throws JSONException
     {
         Log.d("IndoorAtlas", "setARPoseMatrix: " + floats);
-        requestARUpdates().setPoseMatrix(getFloatValues(floats, callbackContext));
+        requestARUpdates().setPoseMatrix(Utils.getFloatValues(floats, callbackContext));
+    }
+
+    public void executeReactMethod(String action, ReadableArray args, Callback success, Callback error)
+    {
+        try {
+            this.execute(action, Utils.reactToJSON(args), new CallbackContext(success, error));
+        } catch (Exception ex) {
+            FLog.e(getName(), "Unexpected error:" + ex.getMessage());
+        }
     }
 }

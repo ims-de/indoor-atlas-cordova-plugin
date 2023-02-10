@@ -1,7 +1,6 @@
 package com.ialocation.plugin;
 
 import com.remobile.cordova.CordovaPlugin;
-import com.remobile.cordova.JsonConvert;
 import com.remobile.cordova.PluginResult;
 
 import org.json.JSONException;
@@ -26,7 +25,7 @@ class CallbackContext {
         if (pluginResult.status == PluginResult.Status.OK.ordinal()) {
             // send OK results as events to workaround react.native callbacks only being callable once
             try {
-                mPlugin.sendJSEvent(mCallbackName, JsonConvert.jsonToReact(pluginResult.jsonObjectMessage));
+                mPlugin.sendJSEvent(mCallbackName, Utils.jsonToReact(pluginResult.jsonObjectMessage));
             } catch (JSONException ex) {
                 error("Internal error converting results:" + ex.getMessage());
             }
