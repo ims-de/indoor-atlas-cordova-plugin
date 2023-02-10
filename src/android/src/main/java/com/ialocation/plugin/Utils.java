@@ -6,14 +6,17 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONArray;
 
+import com.facebook.react.bridge.ReadableType;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Callback;
 
+import android.util.Log;
+
 class Utils
 {
-    public static JSONArray reactToJSON(ReadableArray args) throws JSONException
+    public static JSONArray reactToJSON(ReadableArray readableArray) throws JSONException
     {
         JSONArray jsonArray = new JSONArray();
 
@@ -26,7 +29,7 @@ class Utils
                     break;
 
                 case Boolean:
-                    jsonArray.put(readableArray.getBoolean(i));
+                    jsonArray.put(args.getBoolean(i));
                     break;
 
                 case Number:
@@ -48,6 +51,33 @@ class Utils
         }
 
         return jsonArray;
+    }
+
+    public static WritableMap jsonToReact(JSONObject jsonObject) throws JSONException
+    {
+        WritableMap writableMap = Arguments.createMap();
+        Iterator iterator = jsonObject.keys();
+
+        while (iterator.hasNext()) {
+            String key = (String) iterator.next();
+            Object value = jsonObject.get(key);
+
+            if (value instanceof Float || value instanceof Double) {
+                writableMap.putDouble(key, jsonObject.getDouble(key));
+            } else if (value instanceof Number) {
+                writableMap.putInt(key, jsonObject.getInt(key));
+            } else if (value instanceof String) {
+                writableMap.putString(key, jsonObject.getString(key));
+            } else if (value instanceof JSONObject) {
+                writableMap.putMap(key, jsonToReact(jsonObject.getJSONObject(key)));
+            } else if (value instanceof JSONArray){
+                writableMap.putArray(key, jsonToReact(jsonObject.getJSONArray(key)));
+            } else if (value == JSONObject.NULL){
+                writableMap.putNull(key);
+            }
+        }
+
+        return writableMap;
     }
 
     public static float[] getFloatValues(JSONArray floats, CallbackContext callbackContext) throws JSONException
