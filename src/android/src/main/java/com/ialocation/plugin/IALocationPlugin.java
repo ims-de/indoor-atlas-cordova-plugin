@@ -1047,7 +1047,7 @@ public class IALocationPlugin extends CordovaPlugin {
     public void executeReactMethod(String action, ReadableArray args, Callback success, Callback error)
     {
         try {
-            this.execute(action, Utils.reactToJSON(args), new CallbackContext(success, error));
+            this.execute(action, Utils.reactToJSON(args), new com.remobile.cordova.CallbackContext(success, error));
         } catch (Exception ex) {
             Log.e(TAG, "Unexpected error:" + ex.getMessage());
         }
