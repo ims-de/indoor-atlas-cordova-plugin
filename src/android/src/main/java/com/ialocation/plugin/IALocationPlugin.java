@@ -1050,7 +1050,7 @@ public class IALocationPlugin extends CordovaPlugin {
     public void setARCameraToWorldMatrix(ReadableArray args, Callback success, Callback error)
     {
         Log.d("IndoorAtlas", "setARCameraToWorldMatrix: " + args);
-        requestARUpdates().setCameraToWorldMatrix(getFloatValues(args.getArray(0), callbackContext));
+        requestARUpdates().setCameraToWorldMatrix(getFloatValues(args.getArray(0), error));
     }
 
     private void setCameraToWorldMatrix(JSONArray floats, CallbackContext callbackContext) throws JSONException
