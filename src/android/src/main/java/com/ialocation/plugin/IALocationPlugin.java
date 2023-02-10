@@ -977,7 +977,15 @@ public class IALocationPlugin extends CordovaPlugin {
     @ReactMethod
     public void addArPlane(ReadableArray args, Callback success, Callback error)
     {
-        executeReactMethod("addArPlane", args, success, error);
+        requestARUpdates().addArPlane(
+            new float[]{
+                (float) args.getDouble(0),
+                (float) args.getDouble(1),
+                (float) args.getDouble(2)
+            },
+            (float) args.getDouble(3),
+            (float) args.getDouble(4)
+        );
     }
 
     private void executeAddArPlain(float centerX, float centerY, float centerZ, float extentX, float extentZ)
