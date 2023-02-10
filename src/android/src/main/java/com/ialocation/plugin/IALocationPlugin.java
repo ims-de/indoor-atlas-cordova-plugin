@@ -14,6 +14,7 @@ import android.os.Looper;
 import android.util.Log;
 import android.content.Context;
 
+import com.indooratlas.android.sdk.IAARSession;
 import com.indooratlas.android.sdk.IALocation;
 import com.indooratlas.android.sdk.IALocationManager;
 import com.indooratlas.android.sdk.IALocationRequest;
