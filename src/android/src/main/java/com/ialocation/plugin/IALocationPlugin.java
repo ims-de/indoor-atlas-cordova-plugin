@@ -67,6 +67,8 @@ public class IALocationPlugin extends CordovaPlugin {
     private IALocationRequest mLocationRequest = IALocationRequest.create();
     private IAOrientationRequest mOrientationRequest = new IAOrientationRequest(1.0, 1.0);
 
+    private IAARSession mArSession;
+
     /**
      * Called by the WebView implementation to check for geolocation permissions, can be used
      * by other Java methods in the event that a plugin is using this as a dependency.
@@ -249,6 +251,20 @@ public class IALocationPlugin extends CordovaPlugin {
             } else if ("lockIndoors".equals(action)) {
               boolean locked = args.getBoolean(0);
               lockIndoors(locked);
+            } else if ("addARPlane".equals(action)) {
+                addArPlain(
+                        (float) args.getDouble(0),
+                        (float) args.getDouble(1),
+                        (float) args.getDouble(2),
+                        (float) args.getDouble(3),
+                        (float) args.getDouble(4)
+                );
+            } else if ("getARConverged".equals(action)) {
+                getARConverged(callbackContext);
+            } else if ("setARCameraToWorldMatrix".equals(action)) {
+                setARCameraToWorldMatrix(args.getJSONArray(0), callbackContext);
+            } else if ("setARPoseMatrix".equals(action)) {
+                setARPoseMatrix(args.getJSONArray(0), callbackContext);
             }
         }
         catch(Exception ex) {
@@ -264,7 +280,10 @@ public class IALocationPlugin extends CordovaPlugin {
      */
     @Override
     public void onDestroy() {
-        if (mLocationManager != null){
+        if (mArSession != null) {
+            mArSession.destroy();
+        }
+        if (mLocationManager != null) {
             mLocationManager.destroy();
         }
         super.onDestroy();
@@ -652,7 +671,7 @@ public class IALocationPlugin extends CordovaPlugin {
             callbackContext.error(PositionError.getErrorObject(PositionError.INITIALIZATION_ERROR));
         }
     }
-    
+
     private void setPositioningMode(String mode, CallbackContext callbackContext) {
       int priority;
       switch (mode) {
@@ -797,7 +816,7 @@ public class IALocationPlugin extends CordovaPlugin {
     public String getName() {
         return "IndoorAtlas";
     }
-    
+
     @ReactMethod
     public void initializeIndoorAtlas(ReadableArray args, Callback success, Callback error) {
         executeReactMethod("initializeIndoorAtlas", args, success, error);
@@ -943,4 +962,56 @@ public class IALocationPlugin extends CordovaPlugin {
         executeReactMethod("lockIndoors", args, success, error);
     }
 
+    private IAARSession requestARUpdates()
+    {
+        if (mArSession == null) {
+            mArSession = mLocationManager.requestArUpdates();
+        }
+
+        return mArSession;
+    }
+
+    private void addArPlain(float centerX, float centerY, float centerZ, float extentX, float extentZ)
+    {
+        requestARUpdates().addArPlane(
+            new float[]{centerX, centerY, centerZ},
+            extentX,
+            extentZ
+        );
+    }
+
+    private void getARConverged(CallbackContext callbackContext) throws JSONException
+    {
+        boolean converged = requestARUpdates().converged();
+
+        JSONObject response = new JSONObject();
+        response.put("converged", converged);
+
+        callbackContext.success(response);
+    }
+
+    private float[] getFloatValues(JSONArray floats, CallbackContext callbackContext) throws JSONException
+    {
+        if (floats.length() != 16) {
+            callbackContext.error("Argument must be an array with exactly 16 floats");
+        }
+
+        float[] values = new float[16];
+
+        for (int i = 0; i<16; i++) {
+            values[i] = (float) floats.getDouble(i);
+        }
+
+        return values;
+    }
+
+    private void setARCameraToWorldMatrix(JSONArray floats, CallbackContext callbackContext) throws JSONException
+    {
+        requestARUpdates().setCameraToWorldMatrix(getFloatValues(floats, callbackContext));
+    }
+
+    private void setARPoseMatrix(JSONArray floats, CallbackContext callbackContext) throws JSONException
+    {
+        requestARUpdates().setPoseMatrix(getFloatValues(floats, callbackContext));
+    }
 }

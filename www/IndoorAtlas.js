@@ -131,7 +131,7 @@ function IndoorAtlas() {
       if (callbacks.onWayfindingRoute) callbacks.onWayfindingRoute(new Route(route));
     });
   }
-  
+
   function requestWayfindingRoute(from, to, onWayfindingRoute) {
     native('requestWayfindingRoute', [from, to], function (route) {
       onWayfindingRoute(new Route(route));
@@ -175,7 +175,7 @@ function IndoorAtlas() {
       var minIntervalSeconds = positioningOptions.minIntervalSeconds || 0;
       native('setOutputThresholds', [minChangeMeters, minIntervalSeconds]);
     }
-    
+
     if (positioningOptions && positioningOptions.positioningMode) {
       if (!['HIGH_ACCURACY','LOW_POWER','CART'].includes(positioningOptions.positioningMode)) {
         throw new Error('Invalid positioning mode: ' + positioningOptions.positioningMode);
@@ -570,7 +570,7 @@ function IndoorAtlas() {
     if (initialized) requestWayfindingRoute(from, to, onWayfindingRoute);
     return self;
   };
- 
+
   // --- Geofences
 
   /**
@@ -747,6 +747,24 @@ function IndoorAtlas() {
       });
     }
     return self;
+  };
+
+  this.addArPlane = function (centerX, centerY, centerZ, extentX, extentZ) {
+    native('addArPlane', [centerX, centerY, centerZ, extentX, extentZ]);
+  };
+
+  this.getARConverged = function (cb) {
+    native('getARConverged', [], function(response) {
+      cb(response.converged);
+    });
+  };
+
+  this.setARCameraToWorldMatrix = function (values) {
+    native('setARCameraToWorldMatrix', [values]);
+  };
+
+  this.setARPoseMatrix = function (values) {
+    native('setARPoseMatrix', [values]);
   };
 }
 
