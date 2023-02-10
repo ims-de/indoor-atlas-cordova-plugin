@@ -1049,7 +1049,7 @@ public class IALocationPlugin extends CordovaPlugin {
         try {
             this.execute(action, Utils.reactToJSON(args), new CallbackContext(success, error));
         } catch (Exception ex) {
-            FLog.e(getName(), "Unexpected error:" + ex.getMessage());
+            Log.e(TAG, "Unexpected error:" + ex.getMessage());
         }
     }
 }
