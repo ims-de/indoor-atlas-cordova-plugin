@@ -84,4 +84,8 @@ typedef NSUInteger IndoorLocationStatus;
 - (void)lockFloor:(CDVInvokedUrlCommand *)command;
 - (void)unlockFloor:(CDVInvokedUrlCommand *)command;
 - (void)lockIndoors:(CDVInvokedUrlCommand *)command;
+- (void)setARPoseMatrix:(CDVInvokedUrlCommand *)command;
+- (void)setARCameraToWorldMatrix:(CDVInvokedUrlCommand *)command;
+- (void)addARPlane:(CDVInvokedUrlCommand *)command;
+- (void)getARConverged:(CDVInvokedUrlCommand *)command;
 @end

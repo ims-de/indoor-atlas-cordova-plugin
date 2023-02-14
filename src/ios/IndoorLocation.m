@@ -54,6 +54,7 @@
 @property (nonatomic, strong) id addStatusUpdateCallbackID;
 @property (nonatomic, strong) id addRouteUpdateCallbackID;
 @property (nonatomic, strong) id addGeofenceUpdateCallbackID;
+@property (nonatomic, strong) id getConvergedCallbackID;
 
 @end
 
@@ -833,6 +834,72 @@
     [self.IAlocationInfo lockIndoors:indoors];
 }
 
+- (void)setARPoseMatrix:(CDVInvokedUrlCommand *)command
+{
+    NSArray *values = [command argumentAtIndex:0];
+    
+    simd_float4x4 matrix = simd_matrix_from_rows(
+        simd_make_float4(0, 0, 0, 0),
+        simd_make_float4(0, 0, 0, 0),
+        simd_make_float4(0, 0, 0, 0),
+        simd_make_float4(0, 0, 0, 0)
+    );
+        
+    for (int i = 0; i < 4; i++) {
+        matrix.columns[i].x = [values[i * 4 + 0] floatValue];
+        matrix.columns[i].y = [values[i * 4 + 1] floatValue];
+        matrix.columns[i].z = [values[i * 4 + 2] floatValue];
+        matrix.columns[i].w = [values[i * 4 + 3] floatValue];
+    }
+
+    [self.IAlocationInfo setPoseMatrix:matrix];
+}
+
+- (void)setARCameraToWorldMatrix:(CDVInvokedUrlCommand *)command
+{
+    NSArray *values = [command argumentAtIndex:0];
+    
+    simd_float4x4 matrix = simd_matrix_from_rows(
+        simd_make_float4(0, 0, 0, 0),
+        simd_make_float4(0, 0, 0, 0),
+        simd_make_float4(0, 0, 0, 0),
+        simd_make_float4(0, 0, 0, 0)
+    );
+        
+    for (int i = 0; i < 4; i++) {
+        matrix.columns[i].x = [values[i * 4 + 0] floatValue];
+        matrix.columns[i].y = [values[i * 4 + 1] floatValue];
+        matrix.columns[i].z = [values[i * 4 + 2] floatValue];
+        matrix.columns[i].w = [values[i * 4 + 3] floatValue];
+    }
+
+    [self.IAlocationInfo cameraToWorldMatrix:matrix];
+}
+
+- (void)addARPlane:(CDVInvokedUrlCommand *)command
+{
+    float centerX = [[command argumentAtIndex:0] floatValue];
+    float centerY = [[command argumentAtIndex:1] floatValue];
+    float centerZ = [[command argumentAtIndex:2] floatValue];
+    float extentX = [[command argumentAtIndex:3] floatValue];
+    float extentZ = [[command argumentAtIndex:4] floatValue];
+    
+    [self.IAlocationInfo addPlaneWithCenterX:centerY withCenterY:centerY withCenterZ:centerZ withExtentX:extentX withExtentZ:extentZ];
+}
+
+- (void)getARConverged:(CDVInvokedUrlCommand *)command
+{
+    self.getConvergedCallbackID = command.callbackId;
+    
+    CDVPluginResult *pluginResult;
+    
+    NSMutableDictionary *result = [NSMutableDictionary dictionaryWithCapacity:1];
+    [result setObject:@([self.IAlocationInfo converged]) forKey:@"converged"];
+
+    pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:result];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:self.getConvergedCallbackID];
+}
+
 /**
  * Create NSMutableDictionary from the RouteLeg object
  */
@@ -1039,4 +1106,8 @@ RCT_EXPORT_CORDOVA_METHOD2(removeDynamicGeofence);
 RCT_EXPORT_CORDOVA_METHOD2(lockFloor);
 RCT_EXPORT_CORDOVA_METHOD2(unlockFloor);
 RCT_EXPORT_CORDOVA_METHOD2(lockIndoors);
+RCT_EXPORT_CORDOVA_METHOD2(setARPoseMatrix);
+RCT_EXPORT_CORDOVA_METHOD2(setARCameraToWorldMatrix);
+RCT_EXPORT_CORDOVA_METHOD2(addARPlane);
+RCT_EXPORT_CORDOVA_METHOD2(getARConverged);
 @end

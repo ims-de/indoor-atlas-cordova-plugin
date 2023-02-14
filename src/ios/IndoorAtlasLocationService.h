@@ -113,6 +113,14 @@ typedef NSUInteger IndoorLocationTransitionType;
  */
 - (void)unlockFloor;
 
+- (void)setPoseMatrix:(const simd_float4x4)poseMatrix;
+
+- (void)cameraToWorldMatrix:(const simd_float4x4)cameraToWorldMatrix;
+
+- (void)addPlaneWithCenterX:(float)centerX withCenterY:(float)centerY withCenterZ:(float)centerZ withExtentX:(float)extentX withExtentZ:(float)extentZ;
+
+- (bool)converged;
+
 /**
  * Start monitoring wayfinding updates.
  * @param request A wayfinding request to destination.

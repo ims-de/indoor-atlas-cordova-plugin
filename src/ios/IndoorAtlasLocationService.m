@@ -240,6 +240,26 @@
     [self.manager unlockFloor];
 }
 
+- (void)setPoseMatrix:(const simd_float4x4)poseMatrix
+{
+    [self.manager.arSession setPoseMatrix:poseMatrix];
+}
+
+- (void)cameraToWorldMatrix:(const simd_float4x4)cameraToWorldMatrix
+{
+    [self.manager.arSession setCameraToWorldMatrix:cameraToWorldMatrix];
+}
+
+- (void)addPlaneWithCenterX:(float)centerX withCenterY:(float)centerY withCenterZ:(float)centerZ withExtentX:(float)extentX withExtentZ:(float)extentZ
+{
+    [self.manager.arSession addPlaneWithCenterX:centerX withCenterY:centerY withCenterZ:centerZ withExtentX:extentX withExtentZ:extentZ];
+}
+
+- (bool)converged
+{
+    return [self.manager.arSession converged];
+}
+
 /**
  * Start monitoring wayfinding updates.
  * @param request A wayfinding request to destination.
