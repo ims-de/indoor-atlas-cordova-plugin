@@ -876,7 +876,7 @@
     [self.IAlocationInfo cameraToWorldMatrix:matrix];
 }
 
-- (void)addARPlane:(CDVInvokedUrlCommand *)command
+- (void)addArPlane:(CDVInvokedUrlCommand *)command
 {
     float centerX = [[command argumentAtIndex:0] floatValue];
     float centerY = [[command argumentAtIndex:1] floatValue];
@@ -1108,6 +1108,6 @@ RCT_EXPORT_CORDOVA_METHOD2(unlockFloor);
 RCT_EXPORT_CORDOVA_METHOD2(lockIndoors);
 RCT_EXPORT_CORDOVA_METHOD2(setARPoseMatrix);
 RCT_EXPORT_CORDOVA_METHOD2(setARCameraToWorldMatrix);
-RCT_EXPORT_CORDOVA_METHOD2(addARPlane);
+RCT_EXPORT_CORDOVA_METHOD2(addArPlane);
 RCT_EXPORT_CORDOVA_METHOD2(getARConverged);
 @end
