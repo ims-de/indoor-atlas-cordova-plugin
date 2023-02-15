@@ -17,7 +17,7 @@
   "author": "IndoorAtlas",
   "license": "Apache 2.0",
   "dependencies": {
-    "@remobile/react-native-cordova": "^1.1.1"
+    "@remobile/react-native-cordova": "git+https://github.com/sathish2416/react-native-cordova.git#patch-1"
   },
   "scripts": {
     "postinstall": "cp -i src/ios/RCTCordova.podspec ../@remobile/react-native-cordova/ios/"
