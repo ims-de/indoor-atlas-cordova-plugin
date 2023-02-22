@@ -751,32 +751,36 @@ function IndoorAtlas() {
 
   this.addArPlane = function (centerX, centerY, centerZ, extentX, extentZ) {
     if (initialized) {
-      native('addArPlane', [centerX, centerY, centerZ, extentX, extentZ]);
+      NativeModules.IndoorAtlas.add(centerX, centerY, centerZ, extentX, extentZ);
+      // native('addArPlane', [centerX, centerY, centerZ, extentX, extentZ]);
     }
   };
 
   this.getARConverged = function (cb) {
-    callbacks.onARConverged = cb;
+    // callbacks.onARConverged = cb;
 
     if (initialized) {
-      native('getARConverged', [], function (response) {
-        if (callbacks.onARConverged) {
-          callbacks.onARConverged(response);
-          delete callbacks.onARConverged;
-        }
-      });
+      NativeModules.IndoorAtlas.getARConverged(response => cb(response))
+      // native('getARConverged', [], function (response) {
+      //   if (callbacks.onARConverged) {
+      //     callbacks.onARConverged(response);
+      //     delete callbacks.onARConverged;
+      //   }
+      // });
     }
   };
 
   this.setARCameraToWorldMatrix = function (values) {
     if (initialized) {
-      native('setARCameraToWorldMatrix', [values]);
+      NativeModules.IndoorAtlas.setARCameraToWorldMatrix(values);
+      // native('setARCameraToWorldMatrix', [values]);
     }
   };
 
   this.setARPoseMatrix = function (values) {
     if (initialized) {
-      native('setARPoseMatrix', [values]);
+      NativeModules.IndoorAtlas.setARPoseMatrix(values);
+      // native('setARPoseMatrix', [values]);
     }
   };
 }
