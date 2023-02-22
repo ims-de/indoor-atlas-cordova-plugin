@@ -950,7 +950,7 @@ RCT_EXPORT_METHOD(addArPlane:(NSNumber *)centerX :(NSNumber*)centerY :(NSNumber*
 //    [self.commandDelegate sendPluginResult:pluginResult callbackId:self.getConvergedCallbackID];
 //}
 
-RCT_EXPORT_METHOD(methodgetARConverged:(RCTResponseSenderBlock)callback)
+RCT_EXPORT_METHOD(getARConverged:(RCTResponseSenderBlock)callback)
 {
     callback(@[
         @{
