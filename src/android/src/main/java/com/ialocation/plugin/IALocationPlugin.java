@@ -1019,7 +1019,7 @@ public class IALocationPlugin extends CordovaPlugin {
     private void setARCameraToWorldMatrix(JSONArray floats, CallbackContext callbackContext) throws JSONException
     {
         Log.d("IndoorAtlas", "setARCameraToWorldMatrix: " + floats);
-        requestARUpdates().setCameraToWorldMatrix(Utils.getFloatValues(floats, callbackContext));
+        requestARUpdates().setCameraToWorldMatrix(Utils.getFloatValues(floats));
     }
 
     @ReactMethod
@@ -1032,7 +1032,7 @@ public class IALocationPlugin extends CordovaPlugin {
     private void setARPoseMatrix(JSONArray floats, CallbackContext callbackContext) throws JSONException
     {
         Log.d("IndoorAtlas", "setARPoseMatrix: " + floats);
-        requestARUpdates().setPoseMatrix(Utils.getFloatValues(floats, callbackContext));
+        requestARUpdates().setPoseMatrix(Utils.getFloatValues(floats));
     }
 
     public void executeReactMethod(String action, ReadableArray args, Callback success, Callback error)
