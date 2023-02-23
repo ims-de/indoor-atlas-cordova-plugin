@@ -928,7 +928,7 @@ RCT_EXPORT_METHOD(setARCameraToWorldMatrix:(NSArray *)values)
 //    [self.IAlocationInfo addPlaneWithCenterX:centerY withCenterY:centerY withCenterZ:centerZ withExtentX:extentX withExtentZ:extentZ];
 //}
 
-RCT_EXPORT_METHOD(addArPlane:(NSNumber *)centerX :(NSNumber*)centerY :(NSNumber*)centerZ :(NSNumber*)extentX :(NSNumber*)extentZ)
+RCT_EXPORT_METHOD(addArPlane:(nonnull NSNumber *)centerX :(nonnull NSNumber*)centerY :(nonnull NSNumber*)centerZ :(nonnull NSNumber*)extentX :(nonnull NSNumber*)extentZ)
 {
     [self.IAlocationInfo addPlaneWithCenterX:[centerY floatValue]
                                  withCenterY:[centerY floatValue]
