@@ -975,30 +975,21 @@ public class IALocationPlugin extends CordovaPlugin {
     }
 
     @ReactMethod
-    public void addArPlane(ReadableArray args, Callback success, Callback error)
+    public void addArPlane(double centerX, double centerY, double centerZ, double extentX, double extentZ)
     {
         requestARUpdates().addArPlane(
             new float[]{
-                (float) args.getDouble(0),
-                (float) args.getDouble(1),
-                (float) args.getDouble(2)
+                (float) centerX,
+                (float) centerY,
+                (float) centerZ
             },
-            (float) args.getDouble(3),
-            (float) args.getDouble(4)
-        );
-    }
-
-    private void addArPlane(float centerX, float centerY, float centerZ, float extentX, float extentZ)
-    {
-        requestARUpdates().addArPlane(
-            new float[]{centerX, centerY, centerZ},
-            extentX,
-            extentZ
+            (float) extentX,
+            (float) extentZ
         );
     }
 
     @ReactMethod
-    public void getARConverged(ReadableArray args, Callback success, Callback error)
+    public void getARConverged(Callback success)
     {
         boolean converged = requestARUpdates().converged();
 
@@ -1019,10 +1010,10 @@ public class IALocationPlugin extends CordovaPlugin {
     }
 
     @ReactMethod
-    public void setARCameraToWorldMatrix(ReadableArray args, Callback success, Callback error)
+    public void setARCameraToWorldMatrix(ReadableArray values)
     {
-        Log.d("IndoorAtlas", "setARCameraToWorldMatrix: " + args);
-        requestARUpdates().setCameraToWorldMatrix(Utils.getFloatValues(args.getArray(0), error));
+        Log.d("IndoorAtlas", "setARCameraToWorldMatrix: " + values);
+        requestARUpdates().setCameraToWorldMatrix(Utils.getFloatValues(values));
     }
 
     private void setARCameraToWorldMatrix(JSONArray floats, CallbackContext callbackContext) throws JSONException
@@ -1032,10 +1023,10 @@ public class IALocationPlugin extends CordovaPlugin {
     }
 
     @ReactMethod
-    public void setARPoseMatrix(ReadableArray args, Callback success, Callback error)
+    public void setARPoseMatrix(ReadableArray values)
     {
-        Log.d("IndoorAtlas", "setARPoseMatrix: " + args);
-        requestARUpdates().setPoseMatrix(Utils.getFloatValues(args.getArray(0), error));
+        Log.d("IndoorAtlas", "setARPoseMatrix: " + values);
+        requestARUpdates().setPoseMatrix(Utils.getFloatValues(values));
     }
 
     private void setARPoseMatrix(JSONArray floats, CallbackContext callbackContext) throws JSONException

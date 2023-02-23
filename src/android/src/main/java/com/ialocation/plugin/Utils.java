@@ -57,12 +57,15 @@ class Utils
         return jsonArray;
     }
 
-    public static JSONObject reactToJSON(ReadableMap readableMap) throws JSONException {
+    public static JSONObject reactToJSON(ReadableMap readableMap) throws JSONException
+    {
         JSONObject jsonObject = new JSONObject();
         ReadableMapKeySetIterator iterator = readableMap.keySetIterator();
-        while(iterator.hasNextKey()){
+
+        while (iterator.hasNextKey()){
             String key = iterator.nextKey();
             ReadableType valueType = readableMap.getType(key);
+
             switch (valueType){
                 case Null:
                     jsonObject.put(key,JSONObject.NULL);
@@ -115,10 +118,12 @@ class Utils
         return writableMap;
     }
 
-    public static WritableArray jsonToReact(JSONArray jsonArray) throws JSONException {
+    public static WritableArray jsonToReact(JSONArray jsonArray) throws JSONException
+    {
         WritableArray writableArray = Arguments.createArray();
-        for(int i=0; i < jsonArray.length(); i++) {
+        for (int i=0; i < jsonArray.length(); i++) {
             Object value = jsonArray.get(i);
+
             if (value instanceof Float || value instanceof Double) {
                 writableArray.pushDouble(jsonArray.getDouble(i));
             } else if (value instanceof Number) {
@@ -133,13 +138,14 @@ class Utils
                 writableArray.pushNull();
             }
         }
+
         return writableArray;
     }
 
-    public static float[] getFloatValues(JSONArray floats, CallbackContext callbackContext) throws JSONException
+    public static float[] getFloatValues(JSONArray floats) throws JSONException
     {
         if (floats.length() != 16) {
-            callbackContext.error("Argument must be an array with exactly 16 floats");
+            throw new JSONException("Argument must be an array with exactly 16 floats");
         }
 
         float[] values = new float[16];
@@ -154,10 +160,10 @@ class Utils
         return values;
     }
 
-    public static float[] getFloatValues(ReadableArray floats, Callback error)
+    public static float[] getFloatValues(ReadableArray floats) throws JSONException
     {
         if (floats.size() != 16) {
-            error.invoke("Argument must be an array with exactly 16 floats");
+            throw new JSONException("Argument must be an array with exactly 16 floats");
         }
 
         float[] values = new float[16];

@@ -751,7 +751,7 @@ function IndoorAtlas() {
 
   this.addArPlane = function (centerX, centerY, centerZ, extentX, extentZ) {
     if (initialized) {
-      NativeModules.IndoorAtlas.add(centerX, centerY, centerZ, extentX, extentZ);
+      NativeModules.IndoorAtlas.addArPlane(centerX, centerY, centerZ, extentX, extentZ);
       // native('addArPlane', [centerX, centerY, centerZ, extentX, extentZ]);
     }
   };
