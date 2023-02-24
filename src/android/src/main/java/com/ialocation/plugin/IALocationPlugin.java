@@ -977,62 +977,86 @@ public class IALocationPlugin extends CordovaPlugin {
     @ReactMethod
     public void addArPlane(double centerX, double centerY, double centerZ, double extentX, double extentZ)
     {
-        requestARUpdates().addArPlane(
-            new float[]{
-                (float) centerX,
-                (float) centerY,
-                (float) centerZ
-            },
-            (float) extentX,
-            (float) extentZ
-        );
+        try {
+            requestARUpdates().addArPlane(
+                new float[]{
+                    (float) centerX,
+                    (float) centerY,
+                    (float) centerZ
+                },
+                (float) extentX,
+                (float) extentZ
+            );
+        } catch (Exception ex) {
+            Log.e(TAG, "Unexpected error:" + ex.getMessage());
+        }
     }
 
     @ReactMethod
     public void getARConverged(Callback success)
     {
-        boolean converged = requestARUpdates().converged();
+        try {
+            boolean converged = requestARUpdates().converged();
 
-        WritableMap response = Arguments.createMap();
-        response.putBoolean("converged", converged);
+            WritableMap response = Arguments.createMap();
+            response.putBoolean("converged", converged);
 
-        success.invoke(response);
+            success.invoke(response);
+        } catch (Exception ex) {
+            Log.e(TAG, "Unexpected error:" + ex.getMessage());
+        }
     }
 
-    private void getARConverged(CallbackContext callbackContext) throws JSONException
+    private void getARConverged(CallbackContext callbackContext)
     {
-        boolean converged = requestARUpdates().converged();
+        try {
+            boolean converged = requestARUpdates().converged();
 
-        JSONObject response = new JSONObject();
-        response.put("converged", converged ? 1 : 0);
+            JSONObject response = new JSONObject();
+            response.put("converged", converged ? 1 : 0);
 
-        callbackContext.success(response);
-    }
-
-    @ReactMethod
-    public void setARCameraToWorldMatrix(ReadableArray values)throws JSONException
-    {
-        Log.d("IndoorAtlas", "setARCameraToWorldMatrix: " + values);
-        requestARUpdates().setCameraToWorldMatrix(Utils.getFloatValues(values));
-    }
-
-    private void setARCameraToWorldMatrix(JSONArray floats, CallbackContext callbackContext) throws JSONException
-    {
-        Log.d("IndoorAtlas", "setARCameraToWorldMatrix: " + floats);
-        requestARUpdates().setCameraToWorldMatrix(Utils.getFloatValues(floats));
+            callbackContext.success(response);
+        } catch (Exception ex) {
+            Log.e(TAG, "Unexpected error:" + ex.getMessage());
+        }
     }
 
     @ReactMethod
-    public void setARPoseMatrix(ReadableArray values) throws JSONException
+    public void setARCameraToWorldMatrix(ReadableArray values)
     {
-        Log.d("IndoorAtlas", "setARPoseMatrix: " + values);
-        requestARUpdates().setPoseMatrix(Utils.getFloatValues(values));
+        try {
+            requestARUpdates().setCameraToWorldMatrix(Utils.getFloatValues(values));
+        } catch (Exception ex) {
+            Log.e(TAG, "Unexpected error:" + ex.getMessage());
+        }
     }
 
-    private void setARPoseMatrix(JSONArray floats, CallbackContext callbackContext) throws JSONException
+    private void setARCameraToWorldMatrix(JSONArray floats, CallbackContext callbackContext)
     {
-        Log.d("IndoorAtlas", "setARPoseMatrix: " + floats);
-        requestARUpdates().setPoseMatrix(Utils.getFloatValues(floats));
+        try {
+            requestARUpdates().setCameraToWorldMatrix(Utils.getFloatValues(floats));
+        } catch (Exception ex) {
+            Log.e(TAG, "Unexpected error:" + ex.getMessage());
+        }
+    }
+
+    @ReactMethod
+    public void setARPoseMatrix(ReadableArray values)
+    {
+        try {
+            requestARUpdates().setPoseMatrix(Utils.getFloatValues(values));
+        } catch (Exception ex) {
+            Log.e(TAG, "Unexpected error:" + ex.getMessage());
+        }
+    }
+
+    private void setARPoseMatrix(JSONArray floats, CallbackContext callbackContext)
+    {
+        try {
+            requestARUpdates().setPoseMatrix(Utils.getFloatValues(floats));
+        } catch (Exception ex) {
+            Log.e(TAG, "Unexpected error:" + ex.getMessage());
+        }
     }
 
     public void executeReactMethod(String action, ReadableArray args, Callback success, Callback error)

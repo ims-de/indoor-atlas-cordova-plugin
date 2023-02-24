@@ -154,9 +154,6 @@ class Utils
             values[i] = (float) floats.getDouble(i);
         }
 
-        Log.d("IndoorAtlasUtils", "Input: " + floats);
-        Log.d("IndoorAtlasUtils", "Output: " + Arrays.toString(values));
-
         return values;
     }
 
@@ -171,9 +168,6 @@ class Utils
         for (int i = 0; i<16; i++) {
             values[i] = (float) floats.getDouble(i);
         }
-
-        Log.d("IndoorAtlasUtils", "Input: " + floats);
-        Log.d("IndoorAtlasUtils", "Output: " + Arrays.toString(values));
 
         return values;
     }
